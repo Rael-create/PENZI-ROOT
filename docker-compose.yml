@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+
+  db:
+    image: mysql:8
+    container_name: smspenzi-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./smspenzi
+    container_name: smspenzi-backend
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_PORT: 3306
+      FLASK_ENV: production
+    ports:
+      - "5000:5000"
+
+      
+  frontend:
+    build: ./penzi-frontend
+    container_name: penzi-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://backend:5000
+    ports:
+      - "5173:5173"
+
+volumes:
+  mysql_data:

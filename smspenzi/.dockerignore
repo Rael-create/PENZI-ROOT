@@ -1,0 +1,25 @@
+# Virtual environment
+venv
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+
+# Git
+.git
+.gitignore
+
+# Environment variables (SECURITY PREVENTION)
+.env
+.env.local
+.env.*.local
+
+# Documentation
+README.md
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
