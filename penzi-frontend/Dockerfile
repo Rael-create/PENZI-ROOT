@@ -1,26 +1,23 @@
-# Use an official Node.js runtime as a parent image
-FROM node:20-alpine
+# Stage 1: Build
+FROM node:20-alpine AS build
 
-# Set working directory inside container
 WORKDIR /app
-
-# Copy package.json and package-lock.json first
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy the rest of the project files
 COPY . .
-
-# Build the React app (creates dist folder)
 RUN npm run build
 
-# Install a simple static file server
-RUN npm install -g serve
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
 
-# Expose port 5173
+# Copy the built React app from Stage 1
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy custom nginx config for proxying
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose the same port used before
 EXPOSE 5173
 
-# Start the app
-CMD ["serve", "-s", "dist", "-l", "5173"]
+# Nginx runs automatically in the background
+CMD ["nginx", "-g", "daemon off;"]

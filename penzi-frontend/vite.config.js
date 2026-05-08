@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
+      host:true,
+      port: 5173,
       proxy: {
         '/penzi': {
           target: env.VITE_API_PROXY_TARGET || 'http://localhost:5000',

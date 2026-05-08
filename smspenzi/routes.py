@@ -1,5 +1,3 @@
-from math import e
-from tkinter.filedialog import Directory
 from urllib import response
 from flask import Blueprint, request, jsonify
 from models import MatchSession, Message, User

@@ -1,5 +1,5 @@
 # Use official Python 3.9 slim image (lightweight)
-FROM python:3.9-slim
+FROM python:3.9
 
 # Set working directory inside container
 WORKDIR /app
@@ -22,4 +22,4 @@ RUN pip install gunicorn
 # Start Gunicorn to serve Flask app in production
 # 4 workers for multi-processing
 # Bind to all interfaces
-CMD ["gunicorn", "--workers", "4", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "--workers", "1", "--timeout", "120", "--bind", "0.0.0.0:5000", "main:app"]
